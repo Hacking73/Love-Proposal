@@ -1,11 +1,9 @@
 /* ==========================================
    SCRIPT.JS
-   COMPLETE VERSION
 ========================================== */
 
 // Pages
 const pages = document.querySelectorAll(".page");
-let currentPage = 0;
 
 // Buttons
 const openBtn = document.getElementById("openBtn");
@@ -18,11 +16,12 @@ const restartBtn = document.getElementById("restartBtn");
 const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
-let isPlaying = false;
+let currentPage = 0;
+let musicPlaying = false;
 
-// ==========================
-// SHOW PAGE
-// ==========================
+// =======================
+// Show Page
+// =======================
 
 function showPage(index){
 
@@ -31,54 +30,56 @@ function showPage(index){
     });
 
     pages[index].classList.add("active");
-    currentPage=index;
+
+    currentPage = index;
 
 }
 
-// ==========================
-// PLAY MUSIC
-// ==========================
+// =======================
+// Play Music
+// =======================
 
 function playMusic(){
 
     music.play().then(()=>{
 
-        isPlaying=true;
+        musicPlaying = true;
 
-        musicBtn.innerHTML="🔊";
+        musicBtn.innerHTML = "🔊";
+
         musicBtn.classList.add("active");
 
-    }).catch(err=>{
+    }).catch(error=>{
 
-        console.log(err);
+        console.log(error);
 
     });
 
 }
 
-// ==========================
-// PAUSE MUSIC
-// ==========================
+// =======================
+// Pause Music
+// =======================
 
 function pauseMusic(){
 
     music.pause();
 
-    isPlaying=false;
+    musicPlaying = false;
 
-    musicBtn.innerHTML="🔇";
+    musicBtn.innerHTML = "🔇";
 
     musicBtn.classList.remove("active");
 
 }
 
-// ==========================
-// MUSIC BUTTON
-// ==========================
+// =======================
+// Music Button
+// =======================
 
-musicBtn.addEventListener("click",()=>{
+musicBtn.onclick = ()=>{
 
-    if(isPlaying){
+    if(musicPlaying){
 
         pauseMusic();
 
@@ -88,55 +89,57 @@ musicBtn.addEventListener("click",()=>{
 
     }
 
-});
+};
 
-// ==========================
-// BUTTON EVENTS
-// ==========================
+// =======================
+// Navigation
+// =======================
 
-openBtn.addEventListener("click",()=>{
+openBtn.onclick = ()=>{
 
     playMusic();
+
     showPage(1);
 
-});
+};
 
-next1.addEventListener("click",()=>{
+next1.onclick = ()=>{
 
     showPage(2);
 
-});
+};
 
-next2.addEventListener("click",()=>{
+next2.onclick = ()=>{
 
     showPage(3);
 
-});
+};
 
-next3.addEventListener("click",()=>{
+next3.onclick = ()=>{
 
     showPage(4);
-    launchConfetti();
 
-});
+    confetti();
 
-restartBtn.addEventListener("click",()=>{
+};
+
+restartBtn.onclick = ()=>{
 
     showPage(0);
 
-});
+};
 
-// ==========================
-// CONFETTI
-// ==========================
+// =======================
+// Confetti
+// =======================
 
-function launchConfetti(){
+function confetti(){
 
-    const box=document.getElementById("confetti");
+    const box = document.getElementById("confetti");
 
-    box.innerHTML="";
+    box.innerHTML = "";
 
-    const colors=[
+    const colors = [
         "#ff4081",
         "#ffd54f",
         "#ffffff",
@@ -144,50 +147,50 @@ function launchConfetti(){
         "#7c4dff"
     ];
 
-    for(let i=0;i<150;i++){
+    for(let i=0;i<120;i++){
 
-        const piece=document.createElement("div");
+        const c = document.createElement("div");
 
-        piece.style.position="absolute";
-        piece.style.width="8px";
-        piece.style.height="14px";
+        c.style.position="absolute";
+        c.style.width="8px";
+        c.style.height="14px";
 
-        piece.style.left=Math.random()*100+"%";
-        piece.style.top="-20px";
+        c.style.left=Math.random()*100+"%";
+        c.style.top="-20px";
 
-        piece.style.background=colors[Math.floor(Math.random()*colors.length)];
+        c.style.background=colors[Math.floor(Math.random()*colors.length)];
 
-        piece.style.transform=`rotate(${Math.random()*360}deg)`;
+        c.style.transform=`rotate(${Math.random()*360}deg)`;
 
-        piece.style.transition="5s linear";
+        c.style.transition="4s linear";
 
-        box.appendChild(piece);
-
-        setTimeout(()=>{
-
-            piece.style.top="110%";
-            piece.style.left=(Math.random()*100)+"%";
-            piece.style.transform="rotate(720deg)";
-
-        },100);
+        box.appendChild(c);
 
         setTimeout(()=>{
 
-            piece.remove();
+            c.style.top="110%";
+            c.style.left=Math.random()*100+"%";
+            c.style.transform="rotate(720deg)";
 
-        },5200);
+        },50);
+
+        setTimeout(()=>{
+
+            c.remove();
+
+        },4200);
 
     }
 
 }
 
-// ==========================
-// FLOATING HEARTS
-// ==========================
+// =======================
+// Floating Hearts
+// =======================
 
 setInterval(()=>{
 
-    const heart=document.createElement("div");
+    const heart = document.createElement("div");
 
     heart.innerHTML="❤️";
 
@@ -195,13 +198,13 @@ setInterval(()=>{
     heart.style.left=Math.random()*100+"vw";
     heart.style.top="100vh";
 
-    heart.style.fontSize=(20+Math.random()*20)+"px";
+    heart.style.fontSize=(18+Math.random()*20)+"px";
 
     heart.style.pointerEvents="none";
 
     heart.style.transition="6s linear";
 
-    heart.style.zIndex="1";
+    heart.style.zIndex="0";
 
     document.body.appendChild(heart);
 
@@ -218,10 +221,8 @@ setInterval(()=>{
 
     },6200);
 
-},700);
+},800);
 
-// ==========================
-// START
-// ==========================
+// Start
 
 showPage(0);
