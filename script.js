@@ -1,287 +1,227 @@
 /* ==========================================
-   STYLE.CSS - PART 1
-   RESET + BODY + PAGES + BUTTONS
+   SCRIPT.JS
+   COMPLETE VERSION
 ========================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
+// Pages
+const pages = document.querySelectorAll(".page");
+let currentPage = 0;
 
-html{
-    scroll-behavior:smooth;
-}
+// Buttons
+const openBtn = document.getElementById("openBtn");
+const next1 = document.getElementById("next1");
+const next2 = document.getElementById("next2");
+const next3 = document.getElementById("next3");
+const restartBtn = document.getElementById("restartBtn");
 
-body{
+// Music
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
 
-    min-height:100vh;
-    overflow:hidden;
+let isPlaying = false;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+// ==========================
+// SHOW PAGE
+// ==========================
 
-    color:#fff;
+function showPage(index){
 
-    background:linear-gradient(-45deg,#ff9ecf,#d7b8ff,#ffc8dd,#b8c0ff);
-    background-size:400% 400%;
+    pages.forEach(page=>{
+        page.classList.remove("active");
+    });
 
-    animation:bgMove 15s ease infinite;
-
-}
-
-@keyframes bgMove{
-
-0%{
-background-position:0% 50%;
-}
-
-50%{
-background-position:100% 50%;
-}
-
-100%{
-background-position:0% 50%;
-}
+    pages[index].classList.add("active");
+    currentPage=index;
 
 }
 
-/* ==========================
-   PAGE
-========================== */
+// ==========================
+// PLAY MUSIC
+// ==========================
 
-.page{
+function playMusic(){
 
-position:absolute;
+    music.play().then(()=>{
 
-top:0;
-left:0;
+        isPlaying=true;
 
-width:100%;
-height:100vh;
+        musicBtn.innerHTML="🔊";
+        musicBtn.classList.add("active");
 
-display:flex;
+    }).catch(err=>{
 
-justify-content:center;
-align-items:center;
+        console.log(err);
 
-padding:25px;
-
-opacity:0;
-
-visibility:hidden;
-
-transform:translateY(40px);
-
-transition:.6s;
+    });
 
 }
 
-.page.active{
+// ==========================
+// PAUSE MUSIC
+// ==========================
 
-opacity:1;
+function pauseMusic(){
 
-visibility:visible;
+    music.pause();
 
-transform:translateY(0);
+    isPlaying=false;
 
-}
+    musicBtn.innerHTML="🔇";
 
-/* ==========================
-   GLASS CARD
-========================== */
-
-.glass{
-
-width:100%;
-
-max-width:760px;
-
-padding:45px;
-
-border-radius:25px;
-
-text-align:center;
-
-background:rgba(255,255,255,.15);
-
-backdrop-filter:blur(15px);
-
--webkit-backdrop-filter:blur(15px);
-
-border:1px solid rgba(255,255,255,.25);
-
-box-shadow:0 10px 35px rgba(0,0,0,.2);
-
-animation:cardShow .8s ease;
+    musicBtn.classList.remove("active");
 
 }
 
-@keyframes cardShow{
+// ==========================
+// MUSIC BUTTON
+// ==========================
 
-from{
+musicBtn.addEventListener("click",()=>{
 
-opacity:0;
+    if(isPlaying){
 
-transform:translateY(40px);
+        pauseMusic();
 
-}
+    }else{
 
-to{
+        playMusic();
 
-opacity:1;
+    }
 
-transform:translateY(0);
+});
 
-}
+// ==========================
+// BUTTON EVENTS
+// ==========================
 
-}
+openBtn.addEventListener("click",()=>{
 
-/* ==========================
-   TEXT
-========================== */
+    playMusic();
+    showPage(1);
 
-h1{
+});
 
-font-size:52px;
+next1.addEventListener("click",()=>{
 
-font-family:'Great Vibes',cursive;
+    showPage(2);
 
-margin-bottom:20px;
+});
 
-}
+next2.addEventListener("click",()=>{
 
-h2{
+    showPage(3);
 
-font-size:34px;
+});
 
-margin-bottom:20px;
+next3.addEventListener("click",()=>{
 
-}
+    showPage(4);
+    launchConfetti();
 
-h3{
+});
 
-font-size:24px;
+restartBtn.addEventListener("click",()=>{
 
-margin-bottom:15px;
+    showPage(0);
 
-}
+});
 
-p{
+// ==========================
+// CONFETTI
+// ==========================
 
-font-size:18px;
+function launchConfetti(){
 
-line-height:1.9;
+    const box=document.getElementById("confetti");
 
-margin-top:15px;
+    box.innerHTML="";
 
-}
+    const colors=[
+        "#ff4081",
+        "#ffd54f",
+        "#ffffff",
+        "#00e5ff",
+        "#7c4dff"
+    ];
 
-.letter{
+    for(let i=0;i<150;i++){
 
-white-space:pre-line;
+        const piece=document.createElement("div");
 
-}
+        piece.style.position="absolute";
+        piece.style.width="8px";
+        piece.style.height="14px";
 
-.proposal-text{
+        piece.style.left=Math.random()*100+"%";
+        piece.style.top="-20px";
 
-white-space:pre-line;
+        piece.style.background=colors[Math.floor(Math.random()*colors.length)];
 
-}
+        piece.style.transform=`rotate(${Math.random()*360}deg)`;
 
-/* ==========================
-   BUTTONS
-========================== */
+        piece.style.transition="5s linear";
 
-.mainBtn,
-.proposalBtn{
+        box.appendChild(piece);
 
-display:inline-block;
+        setTimeout(()=>{
 
-margin-top:30px;
+            piece.style.top="110%";
+            piece.style.left=(Math.random()*100)+"%";
+            piece.style.transform="rotate(720deg)";
 
-padding:16px 42px;
+        },100);
 
-border:none;
+        setTimeout(()=>{
 
-border-radius:50px;
+            piece.remove();
 
-background:linear-gradient(90deg,#ff4081,#ff6ea8);
+        },5200);
 
-color:#fff;
-
-font-size:18px;
-
-font-weight:600;
-
-text-decoration:none;
-
-cursor:pointer;
-
-transition:.3s;
-
-box-shadow:0 8px 20px rgba(255,64,129,.35);
-
-}
-
-.mainBtn:hover,
-.proposalBtn:hover{
-
-transform:translateY(-5px);
-
-box-shadow:0 15px 30px rgba(255,64,129,.45);
+    }
 
 }
 
-/* ==========================
-   MUSIC BUTTON
-========================== */
+// ==========================
+// FLOATING HEARTS
+// ==========================
 
-#musicBtn{
+setInterval(()=>{
 
-position:fixed;
+    const heart=document.createElement("div");
 
-top:20px;
-right:20px;
+    heart.innerHTML="❤️";
 
-width:60px;
-height:60px;
+    heart.style.position="fixed";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.top="100vh";
 
-border:none;
+    heart.style.fontSize=(20+Math.random()*20)+"px";
 
-border-radius:50%;
+    heart.style.pointerEvents="none";
 
-background:#ff4081;
+    heart.style.transition="6s linear";
 
-color:#fff;
+    heart.style.zIndex="1";
 
-font-size:24px;
+    document.body.appendChild(heart);
 
-cursor:pointer;
+    setTimeout(()=>{
 
-display:flex;
+        heart.style.top="-100px";
+        heart.style.opacity="0";
 
-justify-content:center;
-align-items:center;
+    },100);
 
-z-index:999;
+    setTimeout(()=>{
 
-transition:.3s;
+        heart.remove();
 
-box-shadow:0 8px 20px rgba(0,0,0,.25);
+    },6200);
 
-}
+},700);
 
-#musicBtn:hover{
+// ==========================
+// START
+// ==========================
 
-transform:scale(1.1);
-
-}
-
-#musicBtn.active{
-
-background:#00c853;
-
-}
+showPage(0);
