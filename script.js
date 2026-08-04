@@ -1,8 +1,15 @@
 /* ==========================================
-   SCRIPT.JS
+   SCRIPT.JS - PART 1
+   PAGE NAVIGATION + MUSIC
 ========================================== */
 
+// Pages
+
 const pages = document.querySelectorAll(".page");
+
+let currentPage = 0;
+
+// Buttons
 
 const openBtn = document.getElementById("openBtn");
 const next1 = document.getElementById("next1");
@@ -11,200 +18,134 @@ const next3 = document.getElementById("next3");
 const next4 = document.getElementById("next4");
 const restartBtn = document.getElementById("restartBtn");
 
+// Music
+
 const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
-let currentPage = 0;
-let playing = false;
+let musicPlaying = false;
 
 /* ==========================
-   PAGE CHANGE
+   SHOW PAGE
 ========================== */
 
-function showPage(index) {
-    pages.forEach(page => page.classList.remove("active"));
+function showPage(index){
 
-    if (pages[index]) {
-        pages[index].classList.add("active");
-        currentPage = index;
-    }
-}
+pages.forEach(page=>{
 
-/* ==========================
-   MUSIC
-========================== */
-
-function playMusic() {
-
-    music.volume = 0.7;
-
-    music.play().then(() => {
-
-        playing = true;
-        musicBtn.innerHTML = "🔊";
-        musicBtn.classList.add("active");
-
-    }).catch(error => {
-
-        console.log("Audio Error:", error);
-
-    });
-
-}
-
-function pauseMusic() {
-
-    music.pause();
-
-    playing = false;
-
-    musicBtn.innerHTML = "🔇";
-    musicBtn.classList.remove("active");
-
-}
-
-musicBtn.addEventListener("click", () => {
-
-    if (playing) {
-        pauseMusic();
-    } else {
-        playMusic();
-    }
+page.classList.remove("active");
 
 });
 
-/* ==========================
-   BUTTON EVENTS
-========================== */
+pages[index].classList.add("active");
 
-openBtn.addEventListener("click", () => {
-
-    playMusic();
-    showPage(1);
-
-});
-
-next1.addEventListener("click", () => showPage(2));
-next2.addEventListener("click", () => showPage(3));
-next3.addEventListener("click", () => showPage(4));
-
-next4.addEventListener("click", () => {
-
-    showPage(5);
-    launchConfetti();
-
-});
-
-restartBtn.addEventListener("click", () => {
-
-    showPage(0);
-
-});
-
-/* ==========================
-   HEART EFFECT
-========================== */
-
-setInterval(() => {
-
-    const heart = document.createElement("span");
-
-    heart.innerHTML = "❤️";
-
-    heart.style.position = "fixed";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.bottom = "-40px";
-    heart.style.fontSize = (20 + Math.random() * 20) + "px";
-    heart.style.pointerEvents = "none";
-    heart.style.transition = "all 6s linear";
-    heart.style.zIndex = "999";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => {
-
-        heart.style.bottom = "110vh";
-        heart.style.opacity = "0";
-
-    }, 100);
-
-    setTimeout(() => {
-
-        heart.remove();
-
-    }, 6200);
-
-}, 700);
-
-/* ==========================
-   CONFETTI
-========================== */
-
-function launchConfetti() {
-
-    const box = document.getElementById("confetti");
-
-    box.innerHTML = "";
-
-    const colors = [
-        "#ff4d88",
-        "#ffd93d",
-        "#7b68ee",
-        "#00e5ff",
-        "#ffffff",
-        "#ff8fab"
-    ];
-
-    for (let i = 0; i < 150; i++) {
-
-        const piece = document.createElement("div");
-
-        piece.style.position = "absolute";
-        piece.style.left = Math.random() * 100 + "%";
-        piece.style.top = "-20px";
-        piece.style.width = "8px";
-        piece.style.height = "15px";
-        piece.style.background =
-            colors[Math.floor(Math.random() * colors.length)];
-
-        piece.style.transform =
-            `rotate(${Math.random() * 360}deg)`;
-
-        piece.style.transition = "5s linear";
-
-        box.appendChild(piece);
-
-        setTimeout(() => {
-
-            piece.style.top = "110%";
-            piece.style.left =
-                (Math.random() * 100) + "%";
-            piece.style.transform =
-                `rotate(${Math.random() * 720}deg)`;
-
-        }, 100);
-
-        setTimeout(() => {
-
-            piece.remove();
-
-        }, 5200);
-
-    }
+currentPage=index;
 
 }
 
 /* ==========================
-   GALLERY ZOOM
+   PLAY MUSIC
 ========================== */
 
-document.querySelectorAll(".gallery img").forEach(img => {
+function playMusic(){
 
-    img.addEventListener("click", () => {
+music.volume=0.6;
 
-        img.classList.toggle("zoom");
+music.play()
 
-    });
+.then(()=>{
+
+musicPlaying=true;
+
+musicBtn.innerHTML="🔊";
+
+musicBtn.classList.add("active");
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+});
+
+}
+
+/* ==========================
+   PAUSE MUSIC
+========================== */
+
+function pauseMusic(){
+
+music.pause();
+
+musicPlaying=false;
+
+musicBtn.innerHTML="🔇";
+
+musicBtn.classList.remove("active");
+
+}
+
+/* ==========================
+   MUSIC BUTTON
+========================== */
+
+musicBtn.addEventListener("click",()=>{
+
+if(musicPlaying){
+
+pauseMusic();
+
+}else{
+
+playMusic();
+
+}
+
+});
+
+/* ==========================
+   PAGE BUTTONS
+========================== */
+
+openBtn.addEventListener("click",()=>{
+
+playMusic();
+
+showPage(1);
+
+});
+
+next1.addEventListener("click",()=>{
+
+showPage(2);
+
+});
+
+next2.addEventListener("click",()=>{
+
+showPage(3);
+
+});
+
+next3.addEventListener("click",()=>{
+
+showPage(4);
+
+});
+
+next4.addEventListener("click",()=>{
+
+showPage(5);
+
+launchConfetti();
+
+});
+
+restartBtn.addEventListener("click",()=>{
+
+showPage(0);
 
 });
 
@@ -213,3 +154,147 @@ document.querySelectorAll(".gallery img").forEach(img => {
 ========================== */
 
 showPage(0);
+/* ==========================================
+   SCRIPT.JS - PART 2
+   HEARTS + CONFETTI + GALLERY
+========================================== */
+
+/* ==========================
+   FLOATING HEARTS
+========================== */
+
+setInterval(() => {
+
+const heart = document.createElement("div");
+
+heart.innerHTML = "❤️";
+
+heart.style.position = "fixed";
+heart.style.left = Math.random() * 100 + "vw";
+heart.style.top = "100vh";
+heart.style.fontSize = (20 + Math.random() * 25) + "px";
+heart.style.pointerEvents = "none";
+heart.style.zIndex = "999";
+heart.style.transition = "6s linear";
+heart.style.opacity = "1";
+
+document.body.appendChild(heart);
+
+setTimeout(() => {
+
+heart.style.top = "-100px";
+heart.style.opacity = "0";
+
+},100);
+
+setTimeout(() => {
+
+heart.remove();
+
+},6200);
+
+},700);
+
+/* ==========================
+   GALLERY ZOOM
+========================== */
+
+document.querySelectorAll(".gallery img").forEach(img=>{
+
+img.addEventListener("click",()=>{
+
+img.classList.toggle("zoom");
+
+});
+
+});
+
+/* ==========================
+   CONFETTI
+========================== */
+
+function launchConfetti(){
+
+const box=document.getElementById("confetti");
+
+box.innerHTML="";
+
+const colors=[
+"#ff4d88",
+"#ffd93d",
+"#00e5ff",
+"#ffffff",
+"#7b68ee",
+"#ff8fab"
+];
+
+for(let i=0;i<180;i++){
+
+const piece=document.createElement("div");
+
+piece.style.position="absolute";
+piece.style.width="8px";
+piece.style.height="14px";
+piece.style.left=Math.random()*100+"%";
+piece.style.top="-20px";
+
+piece.style.background=
+colors[Math.floor(Math.random()*colors.length)];
+
+piece.style.opacity=".9";
+
+piece.style.transform=
+`rotate(${Math.random()*360}deg)`;
+
+piece.style.transition=
+"transform 5s linear, top 5s linear";
+
+box.appendChild(piece);
+
+setTimeout(()=>{
+
+piece.style.top="110%";
+
+piece.style.transform=
+`translateX(${Math.random()*250-125}px)
+rotate(720deg)`;
+
+},100);
+
+setTimeout(()=>{
+
+piece.remove();
+
+},5200);
+
+}
+
+}
+
+/* ==========================
+   KEYBOARD SUPPORT
+========================== */
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="ArrowRight"){
+
+if(currentPage<pages.length-1){
+
+showPage(currentPage+1);
+
+}
+
+}
+
+if(e.key==="ArrowLeft"){
+
+if(currentPage>0){
+
+showPage(currentPage-1);
+
+}
+
+}
+
+});
