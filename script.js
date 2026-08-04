@@ -1,89 +1,237 @@
 /* ==========================================
-   SCRIPT.JS - PART 1
-   PAGE NAVIGATION + MUSIC
+   STYLE.CSS - PART 1
+   RESET + BODY + PAGES + BUTTONS
 ========================================== */
 
-// Pages
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-const pages = document.querySelectorAll(".page");
+html{
+    scroll-behavior:smooth;
+}
 
-let currentPage = 0;
+body{
 
-// Buttons
+    min-height:100vh;
+    overflow:hidden;
 
-const openBtn = document.getElementById("openBtn");
-const next1 = document.getElementById("next1");
-const next2 = document.getElementById("next2");
-const next3 = document.getElementById("next3");
-const next4 = document.getElementById("next4");
-const restartBtn = document.getElementById("restartBtn");
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-// Music
+    color:#fff;
 
-const music = document.getElementById("bgMusic");
-const musicBtn = document.getElementById("musicBtn");
+    background:linear-gradient(-45deg,#ff9ecf,#d7b8ff,#ffc8dd,#b8c0ff);
+    background-size:400% 400%;
 
-let musicPlaying = false;
+    animation:bgMove 15s ease infinite;
 
-/* ==========================
-   SHOW PAGE
-========================== */
+}
 
-function showPage(index){
+@keyframes bgMove{
 
-pages.forEach(page=>{
+0%{
+background-position:0% 50%;
+}
 
-page.classList.remove("active");
+50%{
+background-position:100% 50%;
+}
 
-});
-
-pages[index].classList.add("active");
-
-currentPage=index;
+100%{
+background-position:0% 50%;
+}
 
 }
 
 /* ==========================
-   PLAY MUSIC
+   PAGE
 ========================== */
 
-function playMusic(){
+.page{
 
-music.volume=0.6;
+position:absolute;
 
-music.play()
+top:0;
+left:0;
 
-.then(()=>{
+width:100%;
+height:100vh;
 
-musicPlaying=true;
+display:flex;
 
-musicBtn.innerHTML="🔊";
+justify-content:center;
+align-items:center;
 
-musicBtn.classList.add("active");
+padding:25px;
 
-})
+opacity:0;
 
-.catch(error=>{
+visibility:hidden;
 
-console.log(error);
+transform:translateY(40px);
 
-});
+transition:.6s;
+
+}
+
+.page.active{
+
+opacity:1;
+
+visibility:visible;
+
+transform:translateY(0);
 
 }
 
 /* ==========================
-   PAUSE MUSIC
+   GLASS CARD
 ========================== */
 
-function pauseMusic(){
+.glass{
 
-music.pause();
+width:100%;
 
-musicPlaying=false;
+max-width:760px;
 
-musicBtn.innerHTML="🔇";
+padding:45px;
 
-musicBtn.classList.remove("active");
+border-radius:25px;
+
+text-align:center;
+
+background:rgba(255,255,255,.15);
+
+backdrop-filter:blur(15px);
+
+-webkit-backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,.25);
+
+box-shadow:0 10px 35px rgba(0,0,0,.2);
+
+animation:cardShow .8s ease;
+
+}
+
+@keyframes cardShow{
+
+from{
+
+opacity:0;
+
+transform:translateY(40px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ==========================
+   TEXT
+========================== */
+
+h1{
+
+font-size:52px;
+
+font-family:'Great Vibes',cursive;
+
+margin-bottom:20px;
+
+}
+
+h2{
+
+font-size:34px;
+
+margin-bottom:20px;
+
+}
+
+h3{
+
+font-size:24px;
+
+margin-bottom:15px;
+
+}
+
+p{
+
+font-size:18px;
+
+line-height:1.9;
+
+margin-top:15px;
+
+}
+
+.letter{
+
+white-space:pre-line;
+
+}
+
+.proposal-text{
+
+white-space:pre-line;
+
+}
+
+/* ==========================
+   BUTTONS
+========================== */
+
+.mainBtn,
+.proposalBtn{
+
+display:inline-block;
+
+margin-top:30px;
+
+padding:16px 42px;
+
+border:none;
+
+border-radius:50px;
+
+background:linear-gradient(90deg,#ff4081,#ff6ea8);
+
+color:#fff;
+
+font-size:18px;
+
+font-weight:600;
+
+text-decoration:none;
+
+cursor:pointer;
+
+transition:.3s;
+
+box-shadow:0 8px 20px rgba(255,64,129,.35);
+
+}
+
+.mainBtn:hover,
+.proposalBtn:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 15px 30px rgba(255,64,129,.45);
 
 }
 
@@ -91,210 +239,49 @@ musicBtn.classList.remove("active");
    MUSIC BUTTON
 ========================== */
 
-musicBtn.addEventListener("click",()=>{
+#musicBtn{
 
-if(musicPlaying){
+position:fixed;
 
-pauseMusic();
+top:20px;
+right:20px;
 
-}else{
+width:60px;
+height:60px;
 
-playMusic();
+border:none;
+
+border-radius:50%;
+
+background:#ff4081;
+
+color:#fff;
+
+font-size:24px;
+
+cursor:pointer;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+z-index:999;
+
+transition:.3s;
+
+box-shadow:0 8px 20px rgba(0,0,0,.25);
 
 }
 
-});
+#musicBtn:hover{
 
-/* ==========================
-   PAGE BUTTONS
-========================== */
-
-openBtn.addEventListener("click",()=>{
-
-playMusic();
-
-showPage(1);
-
-});
-
-next1.addEventListener("click",()=>{
-
-showPage(2);
-
-});
-
-next2.addEventListener("click",()=>{
-
-showPage(3);
-
-});
-
-next3.addEventListener("click",()=>{
-
-showPage(4);
-
-});
-
-next4.addEventListener("click",()=>{
-
-showPage(5);
-
-launchConfetti();
-
-});
-
-restartBtn.addEventListener("click",()=>{
-
-showPage(0);
-
-});
-
-/* ==========================
-   START
-========================== */
-
-showPage(0);
-/* ==========================================
-   SCRIPT.JS - PART 2
-   HEARTS + CONFETTI + GALLERY
-========================================== */
-
-/* ==========================
-   FLOATING HEARTS
-========================== */
-
-setInterval(() => {
-
-const heart = document.createElement("div");
-
-heart.innerHTML = "❤️";
-
-heart.style.position = "fixed";
-heart.style.left = Math.random() * 100 + "vw";
-heart.style.top = "100vh";
-heart.style.fontSize = (20 + Math.random() * 25) + "px";
-heart.style.pointerEvents = "none";
-heart.style.zIndex = "999";
-heart.style.transition = "6s linear";
-heart.style.opacity = "1";
-
-document.body.appendChild(heart);
-
-setTimeout(() => {
-
-heart.style.top = "-100px";
-heart.style.opacity = "0";
-
-},100);
-
-setTimeout(() => {
-
-heart.remove();
-
-},6200);
-
-},700);
-
-/* ==========================
-   GALLERY ZOOM
-========================== */
-
-document.querySelectorAll(".gallery img").forEach(img=>{
-
-img.addEventListener("click",()=>{
-
-img.classList.toggle("zoom");
-
-});
-
-});
-
-/* ==========================
-   CONFETTI
-========================== */
-
-function launchConfetti(){
-
-const box=document.getElementById("confetti");
-
-box.innerHTML="";
-
-const colors=[
-"#ff4d88",
-"#ffd93d",
-"#00e5ff",
-"#ffffff",
-"#7b68ee",
-"#ff8fab"
-];
-
-for(let i=0;i<180;i++){
-
-const piece=document.createElement("div");
-
-piece.style.position="absolute";
-piece.style.width="8px";
-piece.style.height="14px";
-piece.style.left=Math.random()*100+"%";
-piece.style.top="-20px";
-
-piece.style.background=
-colors[Math.floor(Math.random()*colors.length)];
-
-piece.style.opacity=".9";
-
-piece.style.transform=
-`rotate(${Math.random()*360}deg)`;
-
-piece.style.transition=
-"transform 5s linear, top 5s linear";
-
-box.appendChild(piece);
-
-setTimeout(()=>{
-
-piece.style.top="110%";
-
-piece.style.transform=
-`translateX(${Math.random()*250-125}px)
-rotate(720deg)`;
-
-},100);
-
-setTimeout(()=>{
-
-piece.remove();
-
-},5200);
+transform:scale(1.1);
 
 }
 
-}
+#musicBtn.active{
 
-/* ==========================
-   KEYBOARD SUPPORT
-========================== */
-
-document.addEventListener("keydown",(e)=>{
-
-if(e.key==="ArrowRight"){
-
-if(currentPage<pages.length-1){
-
-showPage(currentPage+1);
+background:#00c853;
 
 }
-
-}
-
-if(e.key==="ArrowLeft"){
-
-if(currentPage>0){
-
-showPage(currentPage-1);
-
-}
-
-}
-
-});
