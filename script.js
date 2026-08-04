@@ -1,6 +1,5 @@
 /* ==========================================
    SCRIPT.JS
-   LOVE PROPOSAL WEBSITE
 ========================================== */
 
 const pages = document.querySelectorAll(".page");
@@ -16,283 +15,196 @@ const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
 let currentPage = 0;
+let playing = false;
 
 /* ==========================
    PAGE CHANGE
 ========================== */
 
-function showPage(index){
+function showPage(index) {
+    pages.forEach(page => page.classList.remove("active"));
 
-    pages.forEach(page=>page.classList.remove("active"));
-
-    pages[index].classList.add("active");
-
-    currentPage=index;
-
+    if (pages[index]) {
+        pages[index].classList.add("active");
+        currentPage = index;
+    }
 }
 
 /* ==========================
    MUSIC
 ========================== */
 
-let playing=false;
+function playMusic() {
 
-function playMusic(){
+    music.volume = 0.7;
 
-    music.play();
+    music.play().then(() => {
 
-    playing=true;
+        playing = true;
+        musicBtn.innerHTML = "🔊";
+        musicBtn.classList.add("active");
 
-    musicBtn.innerHTML="🔊";
+    }).catch(error => {
 
-    musicBtn.classList.add("active");
+        console.log("Audio Error:", error);
+
+    });
 
 }
 
-function pauseMusic(){
+function pauseMusic() {
 
     music.pause();
 
-    playing=false;
+    playing = false;
 
-    musicBtn.innerHTML="🔇";
-
+    musicBtn.innerHTML = "🔇";
     musicBtn.classList.remove("active");
 
 }
 
-musicBtn.onclick=()=>{
+musicBtn.addEventListener("click", () => {
 
-    if(playing){
-
+    if (playing) {
         pauseMusic();
-
-    }else{
-
+    } else {
         playMusic();
-
     }
 
-};
+});
 
 /* ==========================
    BUTTON EVENTS
 ========================== */
 
-openBtn.onclick=()=>{
-
-    showPage(1);
+openBtn.addEventListener("click", () => {
 
     playMusic();
+    showPage(1);
 
-};
+});
 
-next1.onclick=()=>{
+next1.addEventListener("click", () => showPage(2));
+next2.addEventListener("click", () => showPage(3));
+next3.addEventListener("click", () => showPage(4));
 
-    showPage(2);
-
-};
-
-next2.onclick=()=>{
-
-    showPage(3);
-
-};
-
-next3.onclick=()=>{
-
-    showPage(4);
-
-};
-
-next4.onclick=()=>{
+next4.addEventListener("click", () => {
 
     showPage(5);
-
     launchConfetti();
 
-};
+});
 
-restartBtn.onclick=()=>{
+restartBtn.addEventListener("click", () => {
 
     showPage(0);
 
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
-
-};
+});
 
 /* ==========================
-   HEARTS
+   HEART EFFECT
 ========================== */
 
-setInterval(()=>{
+setInterval(() => {
 
-    const heart=document.createElement("div");
+    const heart = document.createElement("span");
 
-    heart.innerHTML="❤️";
+    heart.innerHTML = "❤️";
 
-    heart.style.position="fixed";
-
-    heart.style.left=Math.random()*100+"vw";
-
-    heart.style.top="100vh";
-
-    heart.style.fontSize=(20+Math.random()*30)+"px";
-
-    heart.style.pointerEvents="none";
-
-    heart.style.zIndex="999";
-
-    heart.style.transition="all 6s linear";
+    heart.style.position = "fixed";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.bottom = "-40px";
+    heart.style.fontSize = (20 + Math.random() * 20) + "px";
+    heart.style.pointerEvents = "none";
+    heart.style.transition = "all 6s linear";
+    heart.style.zIndex = "999";
 
     document.body.appendChild(heart);
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
-        heart.style.top="-100px";
+        heart.style.bottom = "110vh";
+        heart.style.opacity = "0";
 
-        heart.style.opacity="0";
+    }, 100);
 
-    },100);
-
-    setTimeout(()=>{
+    setTimeout(() => {
 
         heart.remove();
 
-    },6200);
+    }, 6200);
 
-},600);
+}, 700);
 
 /* ==========================
    CONFETTI
 ========================== */
 
-function launchConfetti(){
+function launchConfetti() {
 
-    const box=document.getElementById("confetti");
+    const box = document.getElementById("confetti");
 
-    box.innerHTML="";
+    box.innerHTML = "";
 
-    const colors=[
+    const colors = [
         "#ff4d88",
         "#ffd93d",
-        "#ffffff",
+        "#7b68ee",
         "#00e5ff",
-        "#ff8fab",
-        "#7b68ee"
+        "#ffffff",
+        "#ff8fab"
     ];
 
-    for(let i=0;i<180;i++){
+    for (let i = 0; i < 150; i++) {
 
-        const piece=document.createElement("div");
+        const piece = document.createElement("div");
 
-        piece.style.position="absolute";
+        piece.style.position = "absolute";
+        piece.style.left = Math.random() * 100 + "%";
+        piece.style.top = "-20px";
+        piece.style.width = "8px";
+        piece.style.height = "15px";
+        piece.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
 
-        piece.style.width="8px";
+        piece.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
 
-        piece.style.height="14px";
-
-        piece.style.left=Math.random()*100+"%";
-
-        piece.style.top="-20px";
-
-        piece.style.background=
-
-        colors[Math.floor(Math.random()*colors.length)];
-
-        piece.style.opacity=".9";
-
-        piece.style.transform=
-
-        "rotate("+Math.random()*360+"deg)";
-
-        piece.style.transition=
-
-        "transform 5s linear, top 5s linear";
+        piece.style.transition = "5s linear";
 
         box.appendChild(piece);
 
-        setTimeout(()=>{
+        setTimeout(() => {
 
-            piece.style.top="110%";
+            piece.style.top = "110%";
+            piece.style.left =
+                (Math.random() * 100) + "%";
+            piece.style.transform =
+                `rotate(${Math.random() * 720}deg)`;
 
-            piece.style.transform=
+        }, 100);
 
-            "translateX("+
-
-            (Math.random()*250-125)
-
-            +"px) rotate(720deg)";
-
-        },100);
-
-        setTimeout(()=>{
+        setTimeout(() => {
 
             piece.remove();
 
-        },5200);
+        }, 5200);
 
     }
 
 }
 
 /* ==========================
-   IMAGE ZOOM
+   GALLERY ZOOM
 ========================== */
 
-document.querySelectorAll(".gallery img").forEach(img=>{
+document.querySelectorAll(".gallery img").forEach(img => {
 
-    img.addEventListener("click",()=>{
+    img.addEventListener("click", () => {
 
-        if(img.style.transform==="scale(1.5)"){
-
-            img.style.transform="scale(1)";
-
-            img.style.zIndex="1";
-
-        }else{
-
-            img.style.transform="scale(1.5)";
-
-            img.style.zIndex="999";
-
-        }
+        img.classList.toggle("zoom");
 
     });
-
-});
-
-/* ==========================
-   KEYBOARD SUPPORT
-========================== */
-
-document.addEventListener("keydown",(e)=>{
-
-    if(e.key==="ArrowRight"){
-
-        if(currentPage<pages.length-1){
-
-            showPage(currentPage+1);
-
-        }
-
-    }
-
-    if(e.key==="ArrowLeft"){
-
-        if(currentPage>0){
-
-            showPage(currentPage-1);
-
-        }
-
-    }
 
 });
 
